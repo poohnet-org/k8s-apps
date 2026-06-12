@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-leader
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: redis
+      role: leader
+  template:
+    metadata:
+      labels:
+        app: redis
+        role: leader
+    spec:
+      containers:
+        - name: redis
+          image: docker.io/redis:6.0.5
+          ports:
+            - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  # the frontend resolves this name via DNS
+  name: redis-leader
+spec:
+  selector:
+    app: redis
+    role: leader
+  ports:
+    - port: 6379
+      targetPort: 6379

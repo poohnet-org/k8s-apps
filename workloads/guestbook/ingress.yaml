@@ -1,0 +1,17 @@
+# Traefik's IngressClass is the cluster default, so no ingressClassName needed
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: guestbook-ui
+spec:
+  rules:
+    - host: guestbook.apps.k8s.poohnet.de
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: guestbook-ui
+                port:
+                  number: 80
